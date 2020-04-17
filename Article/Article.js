@@ -1,6 +1,6 @@
 /* This is the data we will be using to create our article components */
 /* Look over this data, then proceed to line 91*/
-const data = [
+const data = [ // an array of objects, each holding data for 1 Article component
   {
     title: 'Lambda School Students: "We\'re the best!"',
     date: 'Nov 5th, 2018',
@@ -88,27 +88,112 @@ const data = [
   }
 ];
 
-/* Step 1: Create a function that creates a component. You will want your component to look like the template below: 
-  
-  <div class="article">
-    <h2>{title of the article}</h2>
-    <p class="date">{date of the article}</p>
+//  Step 1: Create a function that creates a component. You will want your component to look like the template below:
 
-    {three separate paragraph elements}
+//   <div class="article">
+//     <h2>{title of the article}</h2>
+//     <p class="date">{date of the article}</p>
 
-    <span class='expandButton'></span>
-  </div>
+//     {three separate paragraph elements}
 
-  Hint: You will need to use createElement more than once here!
+//     <span class='expandButton'></span>
+//   </div>
 
-  Your function should take either an object as it's one argument, or 5 separate arguments mapping to each piece of the data object above.
+function articleContainer() {
+  const ele = document.createElement('div')
+  ele.classList.add('article')
 
-  Step 2: Add an event listener to the expandButton span. This event listener should toggle the class 'article-open' on the 'article' div.
+  return ele
+}
 
-  Step 3: return the entire component.
+function articleHeader(title) {
+  const ele = document.createElement('h2')
+  ele.textContent = title
 
-  Step 4: Map over the data, creating a component for each oject and add each component to the DOM as children of the 'articles' div.
+  return ele
+}
 
-  Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
+function articleDate(date) {
+  const ele = document.createElement('p')
+  ele.classList.add('date')
+  ele.textContent = date
 
-*/
+  return ele
+}
+
+function articleParagraph(paragraphText) {
+  const ele = document.createElement('p')
+  ele.textContent = paragraphText
+
+  return ele
+}
+
+function articleBtn() {
+  const ele = document.createElement('button')
+  ele.classList.add('expandButton')
+  ele.textContent = 'Expand Article'
+
+  ele.addEventListener('click', (event) => {
+    event.preventDefault()
+
+    const container = event.target.parentElement
+    container.classList.toggle('article-open')
+  })
+
+  return ele
+}
+
+function createArticle(articleData) {
+  // `articleData` is an object containing the fields:
+  // title, date, firstParagraph, secondParagraph, thirdParagraph
+  const div = articleContainer()
+
+  const head = articleHeader(articleData.title)
+  div.appendChild(head)
+
+  const date = articleDate(articleData.date)
+  div.appendChild(date)
+
+  const paragraphs = []
+  paragraphs.push(articleParagraph(articleData.firstParagraph))
+  paragraphs.push(articleParagraph(articleData.secondParagraph))
+  paragraphs.push(articleParagraph(articleData.thirdParagraph))
+  paragraphs.forEach((paragraphElement) => {
+    div.appendChild(paragraphElement)
+  })
+
+  const btn = articleBtn()
+  div.appendChild(btn)
+
+  return div
+}
+
+const articlesDiv = document.querySelector('.articles')
+// console.log(articlesDiv)
+data.forEach((article) => {
+  articlesDiv.appendChild(createArticle(article))
+})
+//   Hint: You will need to use createElement more than once here!
+
+//   Your function should take either an object as it's one argument, or 5 separate arguments mapping to each piece of the data object above.
+
+//   Step 2: Add an event listener to the expandButton span. This event listener should toggle the class 'article-open' on the 'article' div.
+
+//   Step 3: return the entire component.
+
+//   Step 4: Map over the data, creating a component for each object and add each component to the DOM as children of the 'articles' div.
+
+//   Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
+
+const newArticleData = {
+  title: 'Oh my!',
+  date: 'Today!',
+  firstParagraph: `Holy Cow!`,
+
+  secondParagraph: `This is great!`,
+
+  thirdParagraph: `Do you ever notice that when you're writing code that the main word of the thing you're working with -- e.g. 'article' -- starts to look like a weird bunch of letters and less and less like the actual word it is.`
+}
+
+const newArt = createArticle(newArticleData)
+articlesDiv.appendChild(newArt)
